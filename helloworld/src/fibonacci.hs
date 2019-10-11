@@ -1,3 +1,5 @@
+module Fibonacci where
+
 -- Fibonacci sequence
 fibonacci :: Integer -> Integer
 fibonacci 0 = 1
