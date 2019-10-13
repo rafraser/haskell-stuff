@@ -47,3 +47,6 @@ pixelFunc :: (Int, Int) -> Pixel RGB Double
 pixelFunc (i, j) = do
     getColor (mandelbrotI (pixelToComplex j i))
 
+renderMandelbrotPNG = do
+    let colors3 = makeImageR VS (512, 512) pixelFunc :: Image VS RGB Double
+    writeImageExact PNG [] "mandelbrot.png" colors3
