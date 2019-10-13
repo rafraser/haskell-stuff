@@ -38,4 +38,4 @@ Benefits of this method include: simpler calculations and glowier visuals
 A common way of coloring the Mandelbrot set includes taking a log2 of the number of iterations. This creates smooth gradients, but I personally prefer the banded style.
 
 ### Example
-(Mandelbrot Set)[mandelbrot.png]
+![Mandelbrot Set](mandelbrot.png)
