@@ -1,5 +1,6 @@
 -- | Mandelbrot Set
 module Main where
+import Data.Complex
 import MBAscii
 import MBGraphics
 
