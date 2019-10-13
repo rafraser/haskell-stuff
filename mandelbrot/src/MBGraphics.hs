@@ -33,3 +33,17 @@ mandelbrotI :: (RealFloat a) => Complex a -> Int
 mandelbrotI a = do
     let list = take (fromIntegral iterations) (iterate ((a +) . (^2)) 0)
     length (takeWhile (not . escaped) (list))
+
+-- | Convert a point in the image (0..resolution, 0..resolution) to a point in the complex plane
+pixelToComplex :: (RealFloat a) => Int -> Int -> Complex a
+pixelToComplex i j = do
+    let xx = fromIntegral(i) / fromIntegral(resolution)
+    let yy = fromIntegral(j) / fromIntegral(resolution)
+    let real = 4 * xx - 2
+    let imag = 4 * yy - 2
+    (real :+ imag)
+
+pixelFunc :: (Int, Int) -> Pixel RGB Double
+pixelFunc (i, j) = do
+    getColor (mandelbrotI (pixelToComplex j i))
+
