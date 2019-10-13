@@ -43,10 +43,14 @@ mandelbrotI a = do
 -- | Convert a point in the image (0..resolution, 0..resolution) to a point in the complex plane
 pixelToComplex :: (RealFloat a) => Int -> Int -> Complex a
 pixelToComplex i j = do
+    let cx = 0
+    let cy = 0
+    let radius = 2
+
     let xx = fromIntegral(i) / fromIntegral(resolution)
     let yy = fromIntegral(j) / fromIntegral(resolution)
-    let real = 4 * xx - 2
-    let imag = 4 * yy - 2
+    let real = (2 * radius * xx) - radius + cx
+    let imag = (2 * radius * yy) - radius + cy
     (real :+ imag)
 
 -- | Iterate over each pixel of the image
