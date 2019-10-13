@@ -26,3 +26,11 @@ pointCharacter a
     | otherwise = '*'
     where
         p = mandelbrot a 50
+
+-- | Generate an ASCII picture of the Mandelbrot Set
+renderMandelbrotASCII = do
+    mapM_ putStrLn [[pointCharacter (x :+ y) | x <- [-2,-1.9..2]] | y <- [-2,-1.9..2]]
+
+main :: IO()
+main = do
+    renderMandelbrotASCII
