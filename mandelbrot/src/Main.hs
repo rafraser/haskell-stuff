@@ -1,3 +1,5 @@
+-- | Mandelbrot Set
+module Main where
 import Data.Complex
 
 -- | Return the squared magnitude of a given complex number
@@ -31,6 +33,7 @@ pointCharacter a
 renderMandelbrotASCII = do
     mapM_ putStrLn [[pointCharacter (x :+ y) | x <- [-2,-1.9..2]] | y <- [-2,-1.9..2]]
 
+-- | Create a rendering of the Mandelbrot Set when this program is run
 main :: IO()
 main = do
     renderMandelbrotASCII
