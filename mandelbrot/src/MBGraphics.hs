@@ -28,6 +28,9 @@ getColor a = do
     else
         PixelRGB (clampColor (redScale * t)) (clampColor (greenScale * t)) (clampColor (blueScale * t))
 
+memoized_colors :: Int -> Pixel RGB Double
+memoized_colors = (Prelude.map getColor [0..iterations] !!)
+
 -- | Iterate according to the Mandelbrot set formula
 -- This will return a complex number corresponding to the ith iteration
 -- The Mandelbrot set formula is:
@@ -50,7 +53,7 @@ pixelToComplex i j = do
 -- i and j are the x and y coordinates of the image pixel respectively
 pixelFunc :: (Int, Int) -> Pixel RGB Double
 pixelFunc (i, j) = do
-    getColor (mandelbrotI (pixelToComplex j i))
+    memoized_colors (mandelbrotI (pixelToComplex j i))
 
 -- | Renders a graphical version of the Mandelbrot set to a PNG file
 renderMandelbrotPNG = do
