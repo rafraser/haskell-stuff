@@ -14,6 +14,9 @@ resolution = 512
 clampColor :: (Ord a, Num a) => a -> a
 clampColor a = max (min a 1) 0
 
+-- | Return an RGB color given a number of iterations
+-- This is done with a relatively simple calculation of scaling each channel by a constant
+-- The default values for this provide a gorgeous light blue colour, with potent glows at the edges
 getColor :: Int -> Pixel RGB Double
 getColor a = do
     let redScale = 0.6
@@ -43,10 +46,13 @@ pixelToComplex i j = do
     let imag = 4 * yy - 2
     (real :+ imag)
 
+-- | Iterate over each pixel of the image
+-- i and j are the x and y coordinates of the image pixel respectively
 pixelFunc :: (Int, Int) -> Pixel RGB Double
 pixelFunc (i, j) = do
     getColor (mandelbrotI (pixelToComplex j i))
 
+-- | Renders a graphical version of the Mandelbrot set to a PNG file
 renderMandelbrotPNG = do
     let colors3 = makeImageR VS (512, 512) pixelFunc :: Image VS RGB Double
     writeImageExact PNG [] "mandelbrot.png" colors3
