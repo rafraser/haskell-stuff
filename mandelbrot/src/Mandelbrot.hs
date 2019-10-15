@@ -27,3 +27,7 @@ mandelbrot max point func = do
 -- | Standard Mandelbrot Set iterator
 func_mandelbrot :: Complex Double -> [Complex Double]
 func_mandelbrot a = iterate ((a +) . (^2)) a
+
+-- | Julia Set iterator
+func_julia :: Complex Double -> Complex Double -> [Complex Double]
+func_julia c a = iterate((c +) . (^2)) a
