@@ -21,16 +21,13 @@ getColor max a = do
     else
         PixelRGB (clampColor (redScale * t)) (clampColor (greenScale * t)) (clampColor (blueScale * t))
 
+-- | Memoize the colors so they don't need to be computed for every pixel
 memoized_colors :: Int -> Int -> Pixel RGB Double
 memoized_colors max = (Prelude.map (getColor max) [0..max] !!)
 
 -- | Convert a point in the image (0..resolution, 0..resolution) to a point in the complex plane
-pixelToComplex :: Int -> Int -> Int -> Complex Double
-pixelToComplex resolution i j = do
-    let cx = 0
-    let cy = 0
-    let radius = 2
-
+pixelToComplex :: Int -> Int -> Int -> Int -> Int -> Int -> Complex Double
+pixelToComplex cx cy radius resolution i j = do
     let xx = fromIntegral(i) / fromIntegral(resolution)
     let yy = fromIntegral(j) / fromIntegral(resolution)
     let real = (2 * radius * xx) - radius + cx
@@ -39,8 +36,8 @@ pixelToComplex resolution i j = do
 
 -- | Iterate over each pixel of the image
 -- i and j are the x and y coordinates of the image pixel respectively
-pixelFunc :: Int -> Int -> (Complex Double -> [Complex Double]) -> (Int, Int) -> Pixel RGB Double
-pixelFunc max resolution func (i, j) = do
+pixelFunc :: Int -> Int -> Int -> Int -> Int -> (Complex Double -> [Complex Double]) -> (Int, Int) -> Pixel RGB Double
+pixelFunc cx cy radius max resolution func (i, j) = do
     let p = pixelToComplex resolution j i
     memoized_colors max (mandelbrot max p func)
 
@@ -48,5 +45,9 @@ pixelFunc max resolution func (i, j) = do
 -- This new renderer allows specifiying resolution, iterations, and function
 renderMandelbrotPNG :: Int -> Int -> (Complex Double -> [Complex Double]) -> String -> IO()
 renderMandelbrotPNG max resolution func filename = do
-    let colors3 = makeImageR VS (resolution, resolution) (pixelFunc max resolution func) :: Image VS RGB Double
+    let cx = 0
+    let cy = 0
+    let radius = 2
+
+    let colors3 = makeImageR VS (resolution, resolution) (pixelFunc cx cy radius max resolution func) :: Image VS RGB Double
     writeImageExact PNG [] filename colors3
