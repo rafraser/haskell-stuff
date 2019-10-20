@@ -26,7 +26,7 @@ memoized_colors :: Int -> Int -> Pixel RGB Double
 memoized_colors max = (Prelude.map (getColor max) [0..max] !!)
 
 -- | Convert a point in the image (0..resolution, 0..resolution) to a point in the complex plane
-pixelToComplex :: Int -> Int -> Int -> Int -> Int -> Int -> Complex Double
+pixelToComplex :: Double -> Double -> Double -> Int -> Int -> Int -> Complex Double
 pixelToComplex cx cy radius resolution i j = do
     let xx = fromIntegral(i) / fromIntegral(resolution)
     let yy = fromIntegral(j) / fromIntegral(resolution)
@@ -36,9 +36,9 @@ pixelToComplex cx cy radius resolution i j = do
 
 -- | Iterate over each pixel of the image
 -- i and j are the x and y coordinates of the image pixel respectively
-pixelFunc :: Int -> Int -> Int -> Int -> Int -> (Complex Double -> [Complex Double]) -> (Int, Int) -> Pixel RGB Double
+pixelFunc :: Double -> Double -> Double -> Int -> Int -> (Complex Double -> [Complex Double]) -> (Int, Int) -> Pixel RGB Double
 pixelFunc cx cy radius max resolution func (i, j) = do
-    let p = pixelToComplex resolution j i
+    let p = pixelToComplex cx cy radius resolution j i
     memoized_colors max (mandelbrot max p func)
 
 -- | Renders a graphical Mandelbrot function to a PNG file
