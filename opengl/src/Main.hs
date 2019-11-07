@@ -36,16 +36,22 @@ display = do
     flush
     swapBuffers
 
+getShaderName :: [String] -> String
+getShaderName [] = "test"
+getShaderName args = do head args
+
 main :: IO()
 main = do
-    _ <- getArgsAndInitialize
+    (name, args) <- getArgsAndInitialize
     initialDisplayMode $= [RGBMode, WithDepthBuffer, DoubleBuffered]
     initialWindowSize $= Size 500 500
     _ <- createWindow "Shader Test"
 
+    let shaderName = getShaderName args
+
     -- Shaders?
-    vs <- readCompileShader VertexShader "test.vert"
-    fs <- readCompileShader FragmentShader "test.frag"
+    vs <- readCompileShader VertexShader ("shaders/" ++ shaderName ++ ".vert")
+    fs <- readCompileShader FragmentShader ("shaders/" ++ shaderName ++ ".frag")
     loadShaders [vs, fs]
 
     displayCallback $= display
