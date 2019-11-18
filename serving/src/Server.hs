@@ -11,6 +11,7 @@ import GHC.Generics
 import Network.Wai
 import Network.Wai.Handler.Warp
 
+-- Data type for the Users
 data User = User {
     name :: String,
     age :: Int,
@@ -18,20 +19,32 @@ data User = User {
 } deriving (Eq, Show, Generic)
 instance ToJSON User
 
+-- List of two users
 users_list :: [User]
 users_list = [ User "Robert Fraser" 19 "test@example.com"
              ,User "Not Robert" 91 "test2@example.com" ]
+     
+-- Create the API types     
+type MainAPI = UserAPI :<|> StaticAPI
+type StaticAPI = Raw
+type UserAPI = "users" :> Get '[JSON] [User]
 
-type UserAPI1 = "users" :> Get '[JSON] [User]
+-- Register the static server
+staticServer :: Server StaticAPI
+staticServer = serveDirectoryWebApp "public/"
 
-server1 :: Server UserAPI1
-server1 = return users_list
+-- Register the users server
+userServer :: Server UserAPI
+userServer = return users_list
 
-userAPI :: Proxy UserAPI1
-userAPI = Proxy
+-- ?
+api :: Proxy MainAPI
+api = Proxy
 
+-- Setup an application which will serve our API with the servers
 app :: Application
-app = serve userAPI server1
+app = serve api $ userServer :<|> staticServer
 
+-- Run the application on port 8080
 main :: IO()
 main = run 8080 app
