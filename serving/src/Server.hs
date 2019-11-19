@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Server where
+module Main where
 
 import Servant
 import Data.Aeson
@@ -10,6 +10,7 @@ import Data.Aeson.Types
 import GHC.Generics
 import Network.Wai
 import Network.Wai.Handler.Warp
+import Network.Wai.Middleware.Cors
 
 -- Data type for the Users
 data User = User {
@@ -43,7 +44,7 @@ api = Proxy
 
 -- Setup an application which will serve our API with the servers
 app :: Application
-app = serve api $ userServer :<|> staticServer
+app = simpleCors (serve api $ userServer :<|> staticServer)
 
 -- Run the application on port 8080
 main :: IO()
