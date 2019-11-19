@@ -15,15 +15,14 @@ import Network.Wai.Middleware.Cors
 -- Data type for the Users
 data User = User {
     name :: String,
-    age :: Int,
-    email :: String
+    score :: Int
 } deriving (Eq, Show, Generic)
 instance ToJSON User
 
 -- List of two users
 users_list :: [User]
-users_list = [ User "Robert Fraser" 19 "test@example.com"
-             ,User "Not Robert" 91 "test2@example.com" ]
+users_list = [ User "Robert Fraser" 42
+             , User "Not Robert" 96 ]
      
 -- Create the API types     
 type MainAPI = UserAPI :<|> StaticAPI
